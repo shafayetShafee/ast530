@@ -1,0 +1,193 @@
+---
+title: "Basic ML"
+format: html
+---
+
+> DISCLAIMER: This content is copied from this [kaggle notebook](https://www.kaggle.com/code/camnugent/introduction-to-machine-learning-in-r-tutorial/notebook) authored by Cam Nugent
+
+
+## Load the data
+
+```{r}
+#| message: false
+#| warning: false
+
+library(tidyverse)
+library(reshape2)
+
+housing <- read_csv(here::here("data", "housing.csv"))
+head(housing)
+```
+
+We want to predict the median house value.
+
+## Explore the data
+
+
+```{r}
+summary(housing)
+
+count(housing, ocean_proximity)
+```
+
+```{r}
+ggplot(melt(housing), mapping = aes(x = value)) +
+  geom_histogram(bins = 30) +
+  facet_wrap(~variable, scales = "free_x")
+```
+
+## Data cleaning
+
+### missing value imputation for total bedrooms
+
+```{r}
+housing$total_bedrooms[is.na(housing$total_bedrooms)] <- median(housing$total_bedrooms, na.rm = TRUE)
+
+
+summary(housing$total_bedrooms)
+```
+
+### make the total cols as mean
+
+```{r}
+housing$mean_bedrooms <- housing$total_bedrooms / housing$households
+housing$mean_rooms <- housing$total_rooms / housing$households
+
+drops <- c('total_bedrooms', 'total_rooms')
+
+housing <- housing[, !(names(housing) %in% drops)]
+
+head(housing)
+```
+
+### Turn categories into booleans
+
+**A really weird (& hard) way (but simpler to understand, I GUESS!!) to do things**
+
+```{r}
+categories <- unique(housing$ocean_proximity)
+
+cat_housing <- data.frame(ocean_proximity = housing$ocean_proximity)
+
+for (cat in categories) {
+  cat_housing[, cat] <- rep(0, nrow(cat_housing))
+}
+
+head(cat_housing)
+```
+
+**Yes, now down to the pitfall of looping over a dataframe in R!!!** 
+
+```{r}
+for (i in 1:length(cat_housing$ocean_proximity)) { # equiv to nrow
+  cat <- as.character(cat_housing$ocean_proximity[i])
+  cat_housing[, cat][i] = 1 
+}
+
+head(cat_housing)
+sample_n(cat_housing, 5)
+```
+
+```{r}
+# dropping the ocean_proximity (again hard way to do things)
+
+cat_columns <- names(cat_housing)
+keep_columns <- cat_columns[cat_columns != 'ocean_proximity']
+# cat_housing <- select(cat_housing, !!!keep_columns) # it works though (simpler)
+cat_housing <- select(cat_housing, one_of(keep_columns))
+
+sample_n(cat_housing, 6)
+```
+
+### Scale the numerical values
+
+```{r}
+drops_num <- c('ocean_proximity', 'median_house_value')
+housing_num <- housing[, !(names(housing) %in% drops_num)]
+
+head(housing_num)
+```
+
+```{r}
+scaled_housing_num <- scale(housing_num)
+
+head(scaled_housing_num)
+```
+
+```{r}
+cleaned_housing <- cbind(cat_housing, scaled_housing_num, median_house_value = housing$median_house_value)
+
+head(cleaned_housing)
+```
+
+## Create Train Test data
+
+```{r}
+set.seed(1738)
+
+train_sample <- sample.int(n = nrow(cleaned_housing), 
+                           size = floor(0.8 * nrow(cleaned_housing)),
+                           replace = FALSE)
+
+train <- cleaned_housing[train_sample, ]
+test <- cleaned_housing[-train_sample, ]
+
+head(train)
+
+nrow(train) + nrow(test) == nrow(cleaned_housing)
+```
+## Modelling and K-fold CV
+
+```{r}
+library(boot)
+
+glm_house <- glm(median_house_value ~ median_income + mean_rooms + population, 
+                 data = cleaned_housing)
+glm_house
+```
+```{r}
+k_fold_cv_error = cv.glm(cleaned_housing, glm_house, K = 5)
+
+k_fold_cv_error$delta
+```
+
+```{r}
+glm_cv_rmse = sqrt(k_fold_cv_error$delta[1])
+glm_cv_rmse
+```
+
+## Random Forest model
+
+```{r}
+library(randomForest)
+```
+```{r}
+set.seed(1738)
+
+train_y = train[, 'median_house_value']
+train_x = train[, names(train) != 'median_house_value']
+
+head(train_x)
+head(train_y)
+```
+```{r}
+rf_model = randomForest(train_x, y = train_y, ntree = 500, importance = TRUE)
+
+oob_prediction <- predict(rf_model) # leaving out the data source forces on predictions
+
+train_mse <- mean(as.numeric(oob_prediction - train_y)^2)
+oob_rmse <- sqrt(train_mse)
+oob_rmse
+```
+And what about the `rmse` in the test data??
+
+```{r}
+test_y <- test[, 'median_house_value']
+test_x <- test[, names(test) != 'median_house_value']
+
+y_pred <- predict(rf_model, test_x)
+test_mse <- mean((y_pred - test_y)^2)
+test_rmse <- sqrt(test_mse)
+test_rmse
+```
+
