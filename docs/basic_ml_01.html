@@ -1,0 +1,1195 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.2.235">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>Basic ML</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1.6em;
+  vertical-align: middle;
+}
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { color: #008000; } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { color: #008000; font-weight: bold; } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+
+<script src="basic_ml_01_files/libs/clipboard/clipboard.min.js"></script>
+<script src="basic_ml_01_files/libs/quarto-html/quarto.js"></script>
+<script src="basic_ml_01_files/libs/quarto-html/popper.min.js"></script>
+<script src="basic_ml_01_files/libs/quarto-html/tippy.umd.min.js"></script>
+<script src="basic_ml_01_files/libs/quarto-html/anchor.min.js"></script>
+<link href="basic_ml_01_files/libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="basic_ml_01_files/libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="basic_ml_01_files/libs/bootstrap/bootstrap.min.js"></script>
+<link href="basic_ml_01_files/libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="basic_ml_01_files/libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+
+<script src="basic_ml_01_files/libs/kePrint-0.0.1/kePrint.js"></script>
+<link href="basic_ml_01_files/libs/lightable-0.0.1/lightable.css" rel="stylesheet">
+
+
+</head>
+
+<body class="fullcontent">
+
+<div id="quarto-content" class="page-columns page-rows-contents page-layout-article">
+
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Basic ML</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+</header>
+
+<blockquote class="blockquote">
+<p>DISCLAIMER: This content is copied from this <a href="https://www.kaggle.com/code/camnugent/introduction-to-machine-learning-in-r-tutorial/notebook">kaggle notebook</a> authored by Cam Nugent</p>
+</blockquote>
+<section id="load-the-data" class="level2">
+<h2 class="anchored" data-anchor-id="load-the-data">Load the data</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(reshape2)</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(kableExtra)</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>bs_style <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"striped"</span>, <span class="st">"hover"</span>, <span class="st">"condensed"</span>, <span class="st">"responsive"</span>)</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="fu">options</span>(<span class="at">kable_styling_bootstrap_options =</span> bs_style)</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>kbl <span class="ot">&lt;-</span> <span class="cf">function</span>(data) kableExtra<span class="sc">::</span><span class="fu">kbl</span>(data) <span class="sc">%&gt;%</span> <span class="fu">kable_styling</span>()</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>housing <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(here<span class="sc">::</span><span class="fu">here</span>(<span class="st">"data"</span>, <span class="st">"housing.csv"</span>))</span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a><span class="fu">kbl</span>(<span class="fu">head</span>(housing))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+
+<table class="table table-striped table-hover table-condensed table-responsive" style="margin-left: auto; margin-right: auto;">
+ <thead>
+  <tr>
+   <th style="text-align:right;"> longitude </th>
+   <th style="text-align:right;"> latitude </th>
+   <th style="text-align:right;"> housing_median_age </th>
+   <th style="text-align:right;"> total_rooms </th>
+   <th style="text-align:right;"> total_bedrooms </th>
+   <th style="text-align:right;"> population </th>
+   <th style="text-align:right;"> households </th>
+   <th style="text-align:right;"> median_income </th>
+   <th style="text-align:right;"> median_house_value </th>
+   <th style="text-align:left;"> ocean_proximity </th>
+  </tr>
+ </thead>
+<tbody>
+  <tr>
+   <td style="text-align:right;"> -122.23 </td>
+   <td style="text-align:right;"> 37.88 </td>
+   <td style="text-align:right;"> 41 </td>
+   <td style="text-align:right;"> 880 </td>
+   <td style="text-align:right;"> 129 </td>
+   <td style="text-align:right;"> 322 </td>
+   <td style="text-align:right;"> 126 </td>
+   <td style="text-align:right;"> 8.3252 </td>
+   <td style="text-align:right;"> 452600 </td>
+   <td style="text-align:left;"> NEAR BAY </td>
+  </tr>
+  <tr>
+   <td style="text-align:right;"> -122.22 </td>
+   <td style="text-align:right;"> 37.86 </td>
+   <td style="text-align:right;"> 21 </td>
+   <td style="text-align:right;"> 7099 </td>
+   <td style="text-align:right;"> 1106 </td>
+   <td style="text-align:right;"> 2401 </td>
+   <td style="text-align:right;"> 1138 </td>
+   <td style="text-align:right;"> 8.3014 </td>
+   <td style="text-align:right;"> 358500 </td>
+   <td style="text-align:left;"> NEAR BAY </td>
+  </tr>
+  <tr>
+   <td style="text-align:right;"> -122.24 </td>
+   <td style="text-align:right;"> 37.85 </td>
+   <td style="text-align:right;"> 52 </td>
+   <td style="text-align:right;"> 1467 </td>
+   <td style="text-align:right;"> 190 </td>
+   <td style="text-align:right;"> 496 </td>
+   <td style="text-align:right;"> 177 </td>
+   <td style="text-align:right;"> 7.2574 </td>
+   <td style="text-align:right;"> 352100 </td>
+   <td style="text-align:left;"> NEAR BAY </td>
+  </tr>
+  <tr>
+   <td style="text-align:right;"> -122.25 </td>
+   <td style="text-align:right;"> 37.85 </td>
+   <td style="text-align:right;"> 52 </td>
+   <td style="text-align:right;"> 1274 </td>
+   <td style="text-align:right;"> 235 </td>
+   <td style="text-align:right;"> 558 </td>
+   <td style="text-align:right;"> 219 </td>
+   <td style="text-align:right;"> 5.6431 </td>
+   <td style="text-align:right;"> 341300 </td>
+   <td style="text-align:left;"> NEAR BAY </td>
+  </tr>
+  <tr>
+   <td style="text-align:right;"> -122.25 </td>
+   <td style="text-align:right;"> 37.85 </td>
+   <td style="text-align:right;"> 52 </td>
+   <td style="text-align:right;"> 1627 </td>
+   <td style="text-align:right;"> 280 </td>
+   <td style="text-align:right;"> 565 </td>
+   <td style="text-align:right;"> 259 </td>
+   <td style="text-align:right;"> 3.8462 </td>
+   <td style="text-align:right;"> 342200 </td>
+   <td style="text-align:left;"> NEAR BAY </td>
+  </tr>
+  <tr>
+   <td style="text-align:right;"> -122.25 </td>
+   <td style="text-align:right;"> 37.85 </td>
+   <td style="text-align:right;"> 52 </td>
+   <td style="text-align:right;"> 919 </td>
+   <td style="text-align:right;"> 213 </td>
+   <td style="text-align:right;"> 413 </td>
+   <td style="text-align:right;"> 193 </td>
+   <td style="text-align:right;"> 4.0368 </td>
+   <td style="text-align:right;"> 269700 </td>
+   <td style="text-align:left;"> NEAR BAY </td>
+  </tr>
+</tbody>
+</table>
+
+</div>
+</div>
+<p>We want to predict the median house value.</p>
+</section>
+<section id="explore-the-data" class="level2">
+<h2 class="anchored" data-anchor-id="explore-the-data">Explore the data</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(housing)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>   longitude         latitude     housing_median_age  total_rooms   
+ Min.   :-124.3   Min.   :32.54   Min.   : 1.00      Min.   :    2  
+ 1st Qu.:-121.8   1st Qu.:33.93   1st Qu.:18.00      1st Qu.: 1448  
+ Median :-118.5   Median :34.26   Median :29.00      Median : 2127  
+ Mean   :-119.6   Mean   :35.63   Mean   :28.64      Mean   : 2636  
+ 3rd Qu.:-118.0   3rd Qu.:37.71   3rd Qu.:37.00      3rd Qu.: 3148  
+ Max.   :-114.3   Max.   :41.95   Max.   :52.00      Max.   :39320  
+                                                                    
+ total_bedrooms     population      households     median_income    
+ Min.   :   1.0   Min.   :    3   Min.   :   1.0   Min.   : 0.4999  
+ 1st Qu.: 296.0   1st Qu.:  787   1st Qu.: 280.0   1st Qu.: 2.5634  
+ Median : 435.0   Median : 1166   Median : 409.0   Median : 3.5348  
+ Mean   : 537.9   Mean   : 1425   Mean   : 499.5   Mean   : 3.8707  
+ 3rd Qu.: 647.0   3rd Qu.: 1725   3rd Qu.: 605.0   3rd Qu.: 4.7432  
+ Max.   :6445.0   Max.   :35682   Max.   :6082.0   Max.   :15.0001  
+ NA's   :207                                                        
+ median_house_value ocean_proximity   
+ Min.   : 14999     Length:20640      
+ 1st Qu.:119600     Class :character  
+ Median :179700     Mode  :character  
+ Mean   :206856                       
+ 3rd Qu.:264725                       
+ Max.   :500001                       
+                                      </code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">count</span>(housing, ocean_proximity)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 5 × 2
+  ocean_proximity     n
+  &lt;chr&gt;           &lt;int&gt;
+1 &lt;1H OCEAN        9136
+2 INLAND           6551
+3 ISLAND              5
+4 NEAR BAY         2290
+5 NEAR OCEAN       2658</code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="fu">melt</span>(housing), <span class="at">mapping =</span> <span class="fu">aes</span>(<span class="at">x =</span> value)) <span class="sc">+</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_histogram</span>(<span class="at">bins =</span> <span class="dv">30</span>) <span class="sc">+</span></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">facet_wrap</span>(<span class="sc">~</span>variable, <span class="at">scales =</span> <span class="st">"free_x"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Using ocean_proximity as id variables</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning: Removed 207 rows containing non-finite values (`stat_bin()`).</code></pre>
+</div>
+<div class="cell-output-display">
+<p><img src="basic_ml_01_files/figure-html/unnamed-chunk-3-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+</section>
+<section id="data-cleaning" class="level2">
+<h2 class="anchored" data-anchor-id="data-cleaning">Data cleaning</h2>
+<section id="missing-value-imputation-for-total-bedrooms" class="level3">
+<h3 class="anchored" data-anchor-id="missing-value-imputation-for-total-bedrooms">missing value imputation for total bedrooms</h3>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>housing<span class="sc">$</span>total_bedrooms[<span class="fu">is.na</span>(housing<span class="sc">$</span>total_bedrooms)] <span class="ot">&lt;-</span> <span class="fu">median</span>(housing<span class="sc">$</span>total_bedrooms, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(housing<span class="sc">$</span>total_bedrooms)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>   Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
+    1.0   297.0   435.0   536.8   643.2  6445.0 </code></pre>
+</div>
+</div>
+</section>
+<section id="make-the-total-cols-as-mean" class="level3">
+<h3 class="anchored" data-anchor-id="make-the-total-cols-as-mean">make the total cols as mean</h3>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>housing<span class="sc">$</span>mean_bedrooms <span class="ot">&lt;-</span> housing<span class="sc">$</span>total_bedrooms <span class="sc">/</span> housing<span class="sc">$</span>households</span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>housing<span class="sc">$</span>mean_rooms <span class="ot">&lt;-</span> housing<span class="sc">$</span>total_rooms <span class="sc">/</span> housing<span class="sc">$</span>households</span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>drops <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">'total_bedrooms'</span>, <span class="st">'total_rooms'</span>)</span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a>housing <span class="ot">&lt;-</span> housing[, <span class="sc">!</span>(<span class="fu">names</span>(housing) <span class="sc">%in%</span> drops)]</span>
+<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a><span class="fu">kbl</span>(<span class="fu">head</span>(housing))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+
+<table class="table table-striped table-hover table-condensed table-responsive" style="margin-left: auto; margin-right: auto;">
+ <thead>
+  <tr>
+   <th style="text-align:right;"> longitude </th>
+   <th style="text-align:right;"> latitude </th>
+   <th style="text-align:right;"> housing_median_age </th>
+   <th style="text-align:right;"> population </th>
+   <th style="text-align:right;"> households </th>
+   <th style="text-align:right;"> median_income </th>
+   <th style="text-align:right;"> median_house_value </th>
+   <th style="text-align:left;"> ocean_proximity </th>
+   <th style="text-align:right;"> mean_bedrooms </th>
+   <th style="text-align:right;"> mean_rooms </th>
+  </tr>
+ </thead>
+<tbody>
+  <tr>
+   <td style="text-align:right;"> -122.23 </td>
+   <td style="text-align:right;"> 37.88 </td>
+   <td style="text-align:right;"> 41 </td>
+   <td style="text-align:right;"> 322 </td>
+   <td style="text-align:right;"> 126 </td>
+   <td style="text-align:right;"> 8.3252 </td>
+   <td style="text-align:right;"> 452600 </td>
+   <td style="text-align:left;"> NEAR BAY </td>
+   <td style="text-align:right;"> 1.0238095 </td>
+   <td style="text-align:right;"> 6.984127 </td>
+  </tr>
+  <tr>
+   <td style="text-align:right;"> -122.22 </td>
+   <td style="text-align:right;"> 37.86 </td>
+   <td style="text-align:right;"> 21 </td>
+   <td style="text-align:right;"> 2401 </td>
+   <td style="text-align:right;"> 1138 </td>
+   <td style="text-align:right;"> 8.3014 </td>
+   <td style="text-align:right;"> 358500 </td>
+   <td style="text-align:left;"> NEAR BAY </td>
+   <td style="text-align:right;"> 0.9718805 </td>
+   <td style="text-align:right;"> 6.238137 </td>
+  </tr>
+  <tr>
+   <td style="text-align:right;"> -122.24 </td>
+   <td style="text-align:right;"> 37.85 </td>
+   <td style="text-align:right;"> 52 </td>
+   <td style="text-align:right;"> 496 </td>
+   <td style="text-align:right;"> 177 </td>
+   <td style="text-align:right;"> 7.2574 </td>
+   <td style="text-align:right;"> 352100 </td>
+   <td style="text-align:left;"> NEAR BAY </td>
+   <td style="text-align:right;"> 1.0734463 </td>
+   <td style="text-align:right;"> 8.288136 </td>
+  </tr>
+  <tr>
+   <td style="text-align:right;"> -122.25 </td>
+   <td style="text-align:right;"> 37.85 </td>
+   <td style="text-align:right;"> 52 </td>
+   <td style="text-align:right;"> 558 </td>
+   <td style="text-align:right;"> 219 </td>
+   <td style="text-align:right;"> 5.6431 </td>
+   <td style="text-align:right;"> 341300 </td>
+   <td style="text-align:left;"> NEAR BAY </td>
+   <td style="text-align:right;"> 1.0730594 </td>
+   <td style="text-align:right;"> 5.817352 </td>
+  </tr>
+  <tr>
+   <td style="text-align:right;"> -122.25 </td>
+   <td style="text-align:right;"> 37.85 </td>
+   <td style="text-align:right;"> 52 </td>
+   <td style="text-align:right;"> 565 </td>
+   <td style="text-align:right;"> 259 </td>
+   <td style="text-align:right;"> 3.8462 </td>
+   <td style="text-align:right;"> 342200 </td>
+   <td style="text-align:left;"> NEAR BAY </td>
+   <td style="text-align:right;"> 1.0810811 </td>
+   <td style="text-align:right;"> 6.281853 </td>
+  </tr>
+  <tr>
+   <td style="text-align:right;"> -122.25 </td>
+   <td style="text-align:right;"> 37.85 </td>
+   <td style="text-align:right;"> 52 </td>
+   <td style="text-align:right;"> 413 </td>
+   <td style="text-align:right;"> 193 </td>
+   <td style="text-align:right;"> 4.0368 </td>
+   <td style="text-align:right;"> 269700 </td>
+   <td style="text-align:left;"> NEAR BAY </td>
+   <td style="text-align:right;"> 1.1036269 </td>
+   <td style="text-align:right;"> 4.761658 </td>
+  </tr>
+</tbody>
+</table>
+
+</div>
+</div>
+</section>
+<section id="turn-categories-into-booleans" class="level3">
+<h3 class="anchored" data-anchor-id="turn-categories-into-booleans">Turn categories into booleans</h3>
+<p><strong>A really weird (&amp; hard) way (but simpler to understand, I GUESS!!) to do things</strong></p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>categories <span class="ot">&lt;-</span> <span class="fu">unique</span>(housing<span class="sc">$</span>ocean_proximity)</span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>cat_housing <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">ocean_proximity =</span> housing<span class="sc">$</span>ocean_proximity)</span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (cat <span class="cf">in</span> categories) {</span>
+<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a>  cat_housing[, cat] <span class="ot">&lt;-</span> <span class="fu">rep</span>(<span class="dv">0</span>, <span class="fu">nrow</span>(cat_housing))</span>
+<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb12-8"><a href="#cb12-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-9"><a href="#cb12-9" aria-hidden="true" tabindex="-1"></a><span class="fu">kbl</span>(<span class="fu">head</span>(cat_housing))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+
+<table class="table table-striped table-hover table-condensed table-responsive" style="margin-left: auto; margin-right: auto;">
+ <thead>
+  <tr>
+   <th style="text-align:left;"> ocean_proximity </th>
+   <th style="text-align:right;"> NEAR BAY </th>
+   <th style="text-align:right;"> &lt;1H OCEAN </th>
+   <th style="text-align:right;"> INLAND </th>
+   <th style="text-align:right;"> NEAR OCEAN </th>
+   <th style="text-align:right;"> ISLAND </th>
+  </tr>
+ </thead>
+<tbody>
+  <tr>
+   <td style="text-align:left;"> NEAR BAY </td>
+   <td style="text-align:right;"> 0 </td>
+   <td style="text-align:right;"> 0 </td>
+   <td style="text-align:right;"> 0 </td>
+   <td style="text-align:right;"> 0 </td>
+   <td style="text-align:right;"> 0 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> NEAR BAY </td>
+   <td style="text-align:right;"> 0 </td>
+   <td style="text-align:right;"> 0 </td>
+   <td style="text-align:right;"> 0 </td>
+   <td style="text-align:right;"> 0 </td>
+   <td style="text-align:right;"> 0 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> NEAR BAY </td>
+   <td style="text-align:right;"> 0 </td>
+   <td style="text-align:right;"> 0 </td>
+   <td style="text-align:right;"> 0 </td>
+   <td style="text-align:right;"> 0 </td>
+   <td style="text-align:right;"> 0 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> NEAR BAY </td>
+   <td style="text-align:right;"> 0 </td>
+   <td style="text-align:right;"> 0 </td>
+   <td style="text-align:right;"> 0 </td>
+   <td style="text-align:right;"> 0 </td>
+   <td style="text-align:right;"> 0 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> NEAR BAY </td>
+   <td style="text-align:right;"> 0 </td>
+   <td style="text-align:right;"> 0 </td>
+   <td style="text-align:right;"> 0 </td>
+   <td style="text-align:right;"> 0 </td>
+   <td style="text-align:right;"> 0 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> NEAR BAY </td>
+   <td style="text-align:right;"> 0 </td>
+   <td style="text-align:right;"> 0 </td>
+   <td style="text-align:right;"> 0 </td>
+   <td style="text-align:right;"> 0 </td>
+   <td style="text-align:right;"> 0 </td>
+  </tr>
+</tbody>
+</table>
+
+</div>
+</div>
+<p><strong>Yes, now down to the pitfall of looping over a dataframe in R!!!</strong></p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">length</span>(cat_housing<span class="sc">$</span>ocean_proximity)) { <span class="co"># equiv to nrow</span></span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>  cat <span class="ot">&lt;-</span> <span class="fu">as.character</span>(cat_housing<span class="sc">$</span>ocean_proximity[i])</span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>  cat_housing[, cat][i] <span class="ot">=</span> <span class="dv">1</span> </span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(cat_housing)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>  ocean_proximity NEAR BAY &lt;1H OCEAN INLAND NEAR OCEAN ISLAND
+1        NEAR BAY        1         0      0          0      0
+2        NEAR BAY        1         0      0          0      0
+3        NEAR BAY        1         0      0          0      0
+4        NEAR BAY        1         0      0          0      0
+5        NEAR BAY        1         0      0          0      0
+6        NEAR BAY        1         0      0          0      0</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="fu">kbl</span>(<span class="fu">sample_n</span>(cat_housing, <span class="dv">5</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+
+<table class="table table-striped table-hover table-condensed table-responsive" style="margin-left: auto; margin-right: auto;">
+ <thead>
+  <tr>
+   <th style="text-align:left;"> ocean_proximity </th>
+   <th style="text-align:right;"> NEAR BAY </th>
+   <th style="text-align:right;"> &lt;1H OCEAN </th>
+   <th style="text-align:right;"> INLAND </th>
+   <th style="text-align:right;"> NEAR OCEAN </th>
+   <th style="text-align:right;"> ISLAND </th>
+  </tr>
+ </thead>
+<tbody>
+  <tr>
+   <td style="text-align:left;"> &lt;1H OCEAN </td>
+   <td style="text-align:right;"> 0 </td>
+   <td style="text-align:right;"> 1 </td>
+   <td style="text-align:right;"> 0 </td>
+   <td style="text-align:right;"> 0 </td>
+   <td style="text-align:right;"> 0 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> &lt;1H OCEAN </td>
+   <td style="text-align:right;"> 0 </td>
+   <td style="text-align:right;"> 1 </td>
+   <td style="text-align:right;"> 0 </td>
+   <td style="text-align:right;"> 0 </td>
+   <td style="text-align:right;"> 0 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> NEAR BAY </td>
+   <td style="text-align:right;"> 1 </td>
+   <td style="text-align:right;"> 0 </td>
+   <td style="text-align:right;"> 0 </td>
+   <td style="text-align:right;"> 0 </td>
+   <td style="text-align:right;"> 0 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> INLAND </td>
+   <td style="text-align:right;"> 0 </td>
+   <td style="text-align:right;"> 0 </td>
+   <td style="text-align:right;"> 1 </td>
+   <td style="text-align:right;"> 0 </td>
+   <td style="text-align:right;"> 0 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> &lt;1H OCEAN </td>
+   <td style="text-align:right;"> 0 </td>
+   <td style="text-align:right;"> 1 </td>
+   <td style="text-align:right;"> 0 </td>
+   <td style="text-align:right;"> 0 </td>
+   <td style="text-align:right;"> 0 </td>
+  </tr>
+</tbody>
+</table>
+
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="co"># dropping the ocean_proximity (again hard way to do things)</span></span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>cat_columns <span class="ot">&lt;-</span> <span class="fu">names</span>(cat_housing)</span>
+<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a>keep_columns <span class="ot">&lt;-</span> cat_columns[cat_columns <span class="sc">!=</span> <span class="st">'ocean_proximity'</span>]</span>
+<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a><span class="co"># cat_housing &lt;- select(cat_housing, !!!keep_columns) # it works though (simpler)</span></span>
+<span id="cb16-6"><a href="#cb16-6" aria-hidden="true" tabindex="-1"></a>cat_housing <span class="ot">&lt;-</span> <span class="fu">select</span>(cat_housing, <span class="fu">one_of</span>(keep_columns))</span>
+<span id="cb16-7"><a href="#cb16-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-8"><a href="#cb16-8" aria-hidden="true" tabindex="-1"></a><span class="fu">kbl</span>(<span class="fu">sample_n</span>(cat_housing, <span class="dv">6</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+
+<table class="table table-striped table-hover table-condensed table-responsive" style="margin-left: auto; margin-right: auto;">
+ <thead>
+  <tr>
+   <th style="text-align:right;"> NEAR BAY </th>
+   <th style="text-align:right;"> &lt;1H OCEAN </th>
+   <th style="text-align:right;"> INLAND </th>
+   <th style="text-align:right;"> NEAR OCEAN </th>
+   <th style="text-align:right;"> ISLAND </th>
+  </tr>
+ </thead>
+<tbody>
+  <tr>
+   <td style="text-align:right;"> 0 </td>
+   <td style="text-align:right;"> 1 </td>
+   <td style="text-align:right;"> 0 </td>
+   <td style="text-align:right;"> 0 </td>
+   <td style="text-align:right;"> 0 </td>
+  </tr>
+  <tr>
+   <td style="text-align:right;"> 0 </td>
+   <td style="text-align:right;"> 0 </td>
+   <td style="text-align:right;"> 1 </td>
+   <td style="text-align:right;"> 0 </td>
+   <td style="text-align:right;"> 0 </td>
+  </tr>
+  <tr>
+   <td style="text-align:right;"> 0 </td>
+   <td style="text-align:right;"> 0 </td>
+   <td style="text-align:right;"> 0 </td>
+   <td style="text-align:right;"> 1 </td>
+   <td style="text-align:right;"> 0 </td>
+  </tr>
+  <tr>
+   <td style="text-align:right;"> 0 </td>
+   <td style="text-align:right;"> 0 </td>
+   <td style="text-align:right;"> 1 </td>
+   <td style="text-align:right;"> 0 </td>
+   <td style="text-align:right;"> 0 </td>
+  </tr>
+  <tr>
+   <td style="text-align:right;"> 0 </td>
+   <td style="text-align:right;"> 1 </td>
+   <td style="text-align:right;"> 0 </td>
+   <td style="text-align:right;"> 0 </td>
+   <td style="text-align:right;"> 0 </td>
+  </tr>
+  <tr>
+   <td style="text-align:right;"> 0 </td>
+   <td style="text-align:right;"> 0 </td>
+   <td style="text-align:right;"> 0 </td>
+   <td style="text-align:right;"> 1 </td>
+   <td style="text-align:right;"> 0 </td>
+  </tr>
+</tbody>
+</table>
+
+</div>
+</div>
+</section>
+<section id="scale-the-numerical-values" class="level3">
+<h3 class="anchored" data-anchor-id="scale-the-numerical-values">Scale the numerical values</h3>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>drops_num <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">'ocean_proximity'</span>, <span class="st">'median_house_value'</span>)</span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>housing_num <span class="ot">&lt;-</span> housing[, <span class="sc">!</span>(<span class="fu">names</span>(housing) <span class="sc">%in%</span> drops_num)]</span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a><span class="fu">kbl</span>(<span class="fu">head</span>(housing_num))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+
+<table class="table table-striped table-hover table-condensed table-responsive" style="margin-left: auto; margin-right: auto;">
+ <thead>
+  <tr>
+   <th style="text-align:right;"> longitude </th>
+   <th style="text-align:right;"> latitude </th>
+   <th style="text-align:right;"> housing_median_age </th>
+   <th style="text-align:right;"> population </th>
+   <th style="text-align:right;"> households </th>
+   <th style="text-align:right;"> median_income </th>
+   <th style="text-align:right;"> mean_bedrooms </th>
+   <th style="text-align:right;"> mean_rooms </th>
+  </tr>
+ </thead>
+<tbody>
+  <tr>
+   <td style="text-align:right;"> -122.23 </td>
+   <td style="text-align:right;"> 37.88 </td>
+   <td style="text-align:right;"> 41 </td>
+   <td style="text-align:right;"> 322 </td>
+   <td style="text-align:right;"> 126 </td>
+   <td style="text-align:right;"> 8.3252 </td>
+   <td style="text-align:right;"> 1.0238095 </td>
+   <td style="text-align:right;"> 6.984127 </td>
+  </tr>
+  <tr>
+   <td style="text-align:right;"> -122.22 </td>
+   <td style="text-align:right;"> 37.86 </td>
+   <td style="text-align:right;"> 21 </td>
+   <td style="text-align:right;"> 2401 </td>
+   <td style="text-align:right;"> 1138 </td>
+   <td style="text-align:right;"> 8.3014 </td>
+   <td style="text-align:right;"> 0.9718805 </td>
+   <td style="text-align:right;"> 6.238137 </td>
+  </tr>
+  <tr>
+   <td style="text-align:right;"> -122.24 </td>
+   <td style="text-align:right;"> 37.85 </td>
+   <td style="text-align:right;"> 52 </td>
+   <td style="text-align:right;"> 496 </td>
+   <td style="text-align:right;"> 177 </td>
+   <td style="text-align:right;"> 7.2574 </td>
+   <td style="text-align:right;"> 1.0734463 </td>
+   <td style="text-align:right;"> 8.288136 </td>
+  </tr>
+  <tr>
+   <td style="text-align:right;"> -122.25 </td>
+   <td style="text-align:right;"> 37.85 </td>
+   <td style="text-align:right;"> 52 </td>
+   <td style="text-align:right;"> 558 </td>
+   <td style="text-align:right;"> 219 </td>
+   <td style="text-align:right;"> 5.6431 </td>
+   <td style="text-align:right;"> 1.0730594 </td>
+   <td style="text-align:right;"> 5.817352 </td>
+  </tr>
+  <tr>
+   <td style="text-align:right;"> -122.25 </td>
+   <td style="text-align:right;"> 37.85 </td>
+   <td style="text-align:right;"> 52 </td>
+   <td style="text-align:right;"> 565 </td>
+   <td style="text-align:right;"> 259 </td>
+   <td style="text-align:right;"> 3.8462 </td>
+   <td style="text-align:right;"> 1.0810811 </td>
+   <td style="text-align:right;"> 6.281853 </td>
+  </tr>
+  <tr>
+   <td style="text-align:right;"> -122.25 </td>
+   <td style="text-align:right;"> 37.85 </td>
+   <td style="text-align:right;"> 52 </td>
+   <td style="text-align:right;"> 413 </td>
+   <td style="text-align:right;"> 193 </td>
+   <td style="text-align:right;"> 4.0368 </td>
+   <td style="text-align:right;"> 1.1036269 </td>
+   <td style="text-align:right;"> 4.761658 </td>
+  </tr>
+</tbody>
+</table>
+
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>scaled_housing_num <span class="ot">&lt;-</span> <span class="fu">scale</span>(housing_num)</span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(scaled_housing_num)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>     longitude latitude housing_median_age population households median_income
+[1,] -1.327803 1.052523          0.9821189 -0.9744050 -0.9770092    2.34470896
+[2,] -1.322812 1.043159         -0.6070042  0.8614180  1.6699206    2.33218146
+[3,] -1.332794 1.038478          1.8561366 -0.8207575 -0.8436165    1.78265622
+[4,] -1.337785 1.038478          1.8561366 -0.7660095 -0.7337637    0.93294491
+[5,] -1.337785 1.038478          1.8561366 -0.7598283 -0.6291419   -0.01288068
+[6,] -1.337785 1.038478          1.8561366 -0.8940491 -0.8017678    0.08744452
+     mean_bedrooms mean_rooms
+[1,]  -0.148510661  0.6285442
+[2,]  -0.248535936  0.3270334
+[3,]  -0.052900657  1.1555925
+[4,]  -0.053646030  0.1569623
+[5,]  -0.038194658  0.3447024
+[6,]   0.005232996 -0.2697231</code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>cleaned_housing <span class="ot">&lt;-</span> <span class="fu">cbind</span>(cat_housing, scaled_housing_num, <span class="at">median_house_value =</span> housing<span class="sc">$</span>median_house_value)</span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a><span class="fu">kbl</span>(<span class="fu">head</span>(cleaned_housing))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+
+<table class="table table-striped table-hover table-condensed table-responsive" style="margin-left: auto; margin-right: auto;">
+ <thead>
+  <tr>
+   <th style="text-align:right;"> NEAR BAY </th>
+   <th style="text-align:right;"> &lt;1H OCEAN </th>
+   <th style="text-align:right;"> INLAND </th>
+   <th style="text-align:right;"> NEAR OCEAN </th>
+   <th style="text-align:right;"> ISLAND </th>
+   <th style="text-align:right;"> longitude </th>
+   <th style="text-align:right;"> latitude </th>
+   <th style="text-align:right;"> housing_median_age </th>
+   <th style="text-align:right;"> population </th>
+   <th style="text-align:right;"> households </th>
+   <th style="text-align:right;"> median_income </th>
+   <th style="text-align:right;"> mean_bedrooms </th>
+   <th style="text-align:right;"> mean_rooms </th>
+   <th style="text-align:right;"> median_house_value </th>
+  </tr>
+ </thead>
+<tbody>
+  <tr>
+   <td style="text-align:right;"> 1 </td>
+   <td style="text-align:right;"> 0 </td>
+   <td style="text-align:right;"> 0 </td>
+   <td style="text-align:right;"> 0 </td>
+   <td style="text-align:right;"> 0 </td>
+   <td style="text-align:right;"> -1.327803 </td>
+   <td style="text-align:right;"> 1.052523 </td>
+   <td style="text-align:right;"> 0.9821189 </td>
+   <td style="text-align:right;"> -0.9744050 </td>
+   <td style="text-align:right;"> -0.9770092 </td>
+   <td style="text-align:right;"> 2.3447090 </td>
+   <td style="text-align:right;"> -0.1485107 </td>
+   <td style="text-align:right;"> 0.6285442 </td>
+   <td style="text-align:right;"> 452600 </td>
+  </tr>
+  <tr>
+   <td style="text-align:right;"> 1 </td>
+   <td style="text-align:right;"> 0 </td>
+   <td style="text-align:right;"> 0 </td>
+   <td style="text-align:right;"> 0 </td>
+   <td style="text-align:right;"> 0 </td>
+   <td style="text-align:right;"> -1.322812 </td>
+   <td style="text-align:right;"> 1.043159 </td>
+   <td style="text-align:right;"> -0.6070042 </td>
+   <td style="text-align:right;"> 0.8614180 </td>
+   <td style="text-align:right;"> 1.6699206 </td>
+   <td style="text-align:right;"> 2.3321815 </td>
+   <td style="text-align:right;"> -0.2485359 </td>
+   <td style="text-align:right;"> 0.3270334 </td>
+   <td style="text-align:right;"> 358500 </td>
+  </tr>
+  <tr>
+   <td style="text-align:right;"> 1 </td>
+   <td style="text-align:right;"> 0 </td>
+   <td style="text-align:right;"> 0 </td>
+   <td style="text-align:right;"> 0 </td>
+   <td style="text-align:right;"> 0 </td>
+   <td style="text-align:right;"> -1.332794 </td>
+   <td style="text-align:right;"> 1.038477 </td>
+   <td style="text-align:right;"> 1.8561366 </td>
+   <td style="text-align:right;"> -0.8207575 </td>
+   <td style="text-align:right;"> -0.8436165 </td>
+   <td style="text-align:right;"> 1.7826562 </td>
+   <td style="text-align:right;"> -0.0529007 </td>
+   <td style="text-align:right;"> 1.1555925 </td>
+   <td style="text-align:right;"> 352100 </td>
+  </tr>
+  <tr>
+   <td style="text-align:right;"> 1 </td>
+   <td style="text-align:right;"> 0 </td>
+   <td style="text-align:right;"> 0 </td>
+   <td style="text-align:right;"> 0 </td>
+   <td style="text-align:right;"> 0 </td>
+   <td style="text-align:right;"> -1.337785 </td>
+   <td style="text-align:right;"> 1.038477 </td>
+   <td style="text-align:right;"> 1.8561366 </td>
+   <td style="text-align:right;"> -0.7660095 </td>
+   <td style="text-align:right;"> -0.7337637 </td>
+   <td style="text-align:right;"> 0.9329449 </td>
+   <td style="text-align:right;"> -0.0536460 </td>
+   <td style="text-align:right;"> 0.1569623 </td>
+   <td style="text-align:right;"> 341300 </td>
+  </tr>
+  <tr>
+   <td style="text-align:right;"> 1 </td>
+   <td style="text-align:right;"> 0 </td>
+   <td style="text-align:right;"> 0 </td>
+   <td style="text-align:right;"> 0 </td>
+   <td style="text-align:right;"> 0 </td>
+   <td style="text-align:right;"> -1.337785 </td>
+   <td style="text-align:right;"> 1.038477 </td>
+   <td style="text-align:right;"> 1.8561366 </td>
+   <td style="text-align:right;"> -0.7598283 </td>
+   <td style="text-align:right;"> -0.6291419 </td>
+   <td style="text-align:right;"> -0.0128807 </td>
+   <td style="text-align:right;"> -0.0381947 </td>
+   <td style="text-align:right;"> 0.3447024 </td>
+   <td style="text-align:right;"> 342200 </td>
+  </tr>
+  <tr>
+   <td style="text-align:right;"> 1 </td>
+   <td style="text-align:right;"> 0 </td>
+   <td style="text-align:right;"> 0 </td>
+   <td style="text-align:right;"> 0 </td>
+   <td style="text-align:right;"> 0 </td>
+   <td style="text-align:right;"> -1.337785 </td>
+   <td style="text-align:right;"> 1.038477 </td>
+   <td style="text-align:right;"> 1.8561366 </td>
+   <td style="text-align:right;"> -0.8940491 </td>
+   <td style="text-align:right;"> -0.8017678 </td>
+   <td style="text-align:right;"> 0.0874445 </td>
+   <td style="text-align:right;"> 0.0052330 </td>
+   <td style="text-align:right;"> -0.2697231 </td>
+   <td style="text-align:right;"> 269700 </td>
+  </tr>
+</tbody>
+</table>
+
+</div>
+</div>
+</section>
+</section>
+<section id="create-train-test-data" class="level2">
+<h2 class="anchored" data-anchor-id="create-train-test-data">Create Train Test data</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">1738</span>)</span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a>train_sample <span class="ot">&lt;-</span> <span class="fu">sample.int</span>(<span class="at">n =</span> <span class="fu">nrow</span>(cleaned_housing), </span>
+<span id="cb21-4"><a href="#cb21-4" aria-hidden="true" tabindex="-1"></a>                           <span class="at">size =</span> <span class="fu">floor</span>(<span class="fl">0.8</span> <span class="sc">*</span> <span class="fu">nrow</span>(cleaned_housing)),</span>
+<span id="cb21-5"><a href="#cb21-5" aria-hidden="true" tabindex="-1"></a>                           <span class="at">replace =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb21-6"><a href="#cb21-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-7"><a href="#cb21-7" aria-hidden="true" tabindex="-1"></a>train <span class="ot">&lt;-</span> cleaned_housing[train_sample, ]</span>
+<span id="cb21-8"><a href="#cb21-8" aria-hidden="true" tabindex="-1"></a>test <span class="ot">&lt;-</span> cleaned_housing[<span class="sc">-</span>train_sample, ]</span>
+<span id="cb21-9"><a href="#cb21-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-10"><a href="#cb21-10" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(train)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>      NEAR BAY &lt;1H OCEAN INLAND NEAR OCEAN ISLAND  longitude   latitude
+15797        1         0      0          0      0 -1.4226356  0.9963418
+11425        0         1      0          0      0  0.7984423 -0.8997679
+9208         0         0      1          0      0 -0.1399007  0.6873461
+8778         0         1      0          0      0  0.6287420 -0.8623139
+18375        0         1      0          0      0 -1.1431292  0.7482089
+19571        0         0      1          0      0 -0.6889312  0.9167520
+      housing_median_age population   households median_income mean_bedrooms
+15797          1.8561366  0.7360275  1.254049198    -0.7002610   -0.09402939
+11425         -0.2891796  0.1938460 -0.006642643     1.0257957   -0.26800948
+9208          -1.6399342 -0.8940491 -0.924698320    -0.2609040    0.09587571
+8778           0.5053819 -0.0454556  0.079670283    -0.3281734   -0.07443967
+18375         -0.3686357  0.4508082  0.398766559     1.0631150   -0.14119530
+19571          1.1410312 -0.4975679 -0.438207278    -1.0654005   -0.06673316
+       mean_rooms median_house_value
+15797 -0.71339265             250000
+11425  0.46743428             286100
+9208   0.09790468              80700
+8778  -0.44792541             254700
+18375  0.49424219             271400
+19571 -0.29391335              81500</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="fu">nrow</span>(train) <span class="sc">+</span> <span class="fu">nrow</span>(test) <span class="sc">==</span> <span class="fu">nrow</span>(cleaned_housing)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] TRUE</code></pre>
+</div>
+</div>
+</section>
+<section id="modelling-and-k-fold-cv" class="level2">
+<h2 class="anchored" data-anchor-id="modelling-and-k-fold-cv">Modelling and K-fold CV</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(boot)</span>
+<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a>glm_house <span class="ot">&lt;-</span> <span class="fu">glm</span>(median_house_value <span class="sc">~</span> median_income <span class="sc">+</span> mean_rooms <span class="sc">+</span> population, </span>
+<span id="cb25-4"><a href="#cb25-4" aria-hidden="true" tabindex="-1"></a>                 <span class="at">data =</span> cleaned_housing)</span>
+<span id="cb25-5"><a href="#cb25-5" aria-hidden="true" tabindex="-1"></a>glm_house</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+Call:  glm(formula = median_house_value ~ median_income + mean_rooms + 
+    population, data = cleaned_housing)
+
+Coefficients:
+  (Intercept)  median_income     mean_rooms     population  
+       206856          82609          -9755          -3948  
+
+Degrees of Freedom: 20639 Total (i.e. Null);  20636 Residual
+Null Deviance:      2.748e+14 
+Residual Deviance: 1.428e+14    AIC: 526200</code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a>k_fold_cv_error <span class="ot">=</span> <span class="fu">cv.glm</span>(cleaned_housing, glm_house, <span class="at">K =</span> <span class="dv">5</span>)</span>
+<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a>k_fold_cv_error<span class="sc">$</span>delta</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 6993810248 6983982760</code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb29"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a>glm_cv_rmse <span class="ot">=</span> <span class="fu">sqrt</span>(k_fold_cv_error<span class="sc">$</span>delta[<span class="dv">1</span>])</span>
+<span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a>glm_cv_rmse</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 83629</code></pre>
+</div>
+</div>
+</section>
+<section id="random-forest-model" class="level2">
+<h2 class="anchored" data-anchor-id="random-forest-model">Random Forest model</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb31"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(randomForest)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning: package 'randomForest' was built under R version 4.2.2</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>randomForest 4.7-1.1</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Type rfNews() to see new features/changes/bug fixes.</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>
+Attaching package: 'randomForest'</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>The following object is masked from 'package:dplyr':
+
+    combine</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>The following object is masked from 'package:ggplot2':
+
+    margin</code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb38"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">1738</span>)</span>
+<span id="cb38-2"><a href="#cb38-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb38-3"><a href="#cb38-3" aria-hidden="true" tabindex="-1"></a>train_y <span class="ot">=</span> train[, <span class="st">'median_house_value'</span>]</span>
+<span id="cb38-4"><a href="#cb38-4" aria-hidden="true" tabindex="-1"></a>train_x <span class="ot">=</span> train[, <span class="fu">names</span>(train) <span class="sc">!=</span> <span class="st">'median_house_value'</span>]</span>
+<span id="cb38-5"><a href="#cb38-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb38-6"><a href="#cb38-6" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(train_x)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>      NEAR BAY &lt;1H OCEAN INLAND NEAR OCEAN ISLAND  longitude   latitude
+15797        1         0      0          0      0 -1.4226356  0.9963418
+11425        0         1      0          0      0  0.7984423 -0.8997679
+9208         0         0      1          0      0 -0.1399007  0.6873461
+8778         0         1      0          0      0  0.6287420 -0.8623139
+18375        0         1      0          0      0 -1.1431292  0.7482089
+19571        0         0      1          0      0 -0.6889312  0.9167520
+      housing_median_age population   households median_income mean_bedrooms
+15797          1.8561366  0.7360275  1.254049198    -0.7002610   -0.09402939
+11425         -0.2891796  0.1938460 -0.006642643     1.0257957   -0.26800948
+9208          -1.6399342 -0.8940491 -0.924698320    -0.2609040    0.09587571
+8778           0.5053819 -0.0454556  0.079670283    -0.3281734   -0.07443967
+18375         -0.3686357  0.4508082  0.398766559     1.0631150   -0.14119530
+19571          1.1410312 -0.4975679 -0.438207278    -1.0654005   -0.06673316
+       mean_rooms
+15797 -0.71339265
+11425  0.46743428
+9208   0.09790468
+8778  -0.44792541
+18375  0.49424219
+19571 -0.29391335</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb40"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb40-1"><a href="#cb40-1" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(train_y)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 250000 286100  80700 254700 271400  81500</code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb42"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb42-1"><a href="#cb42-1" aria-hidden="true" tabindex="-1"></a>rf_model <span class="ot">=</span> <span class="fu">randomForest</span>(train_x, <span class="at">y =</span> train_y, <span class="at">ntree =</span> <span class="dv">500</span>, <span class="at">importance =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb42-2"><a href="#cb42-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb42-3"><a href="#cb42-3" aria-hidden="true" tabindex="-1"></a>oob_prediction <span class="ot">&lt;-</span> <span class="fu">predict</span>(rf_model) <span class="co"># leaving out the data source forces on predictions</span></span>
+<span id="cb42-4"><a href="#cb42-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb42-5"><a href="#cb42-5" aria-hidden="true" tabindex="-1"></a>train_mse <span class="ot">&lt;-</span> <span class="fu">mean</span>(<span class="fu">as.numeric</span>(oob_prediction <span class="sc">-</span> train_y)<span class="sc">^</span><span class="dv">2</span>)</span>
+<span id="cb42-6"><a href="#cb42-6" aria-hidden="true" tabindex="-1"></a>oob_rmse <span class="ot">&lt;-</span> <span class="fu">sqrt</span>(train_mse)</span>
+<span id="cb42-7"><a href="#cb42-7" aria-hidden="true" tabindex="-1"></a>oob_rmse</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 49126.22</code></pre>
+</div>
+</div>
+<p>And what about the <code>rmse</code> in the test data??</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb44"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb44-1"><a href="#cb44-1" aria-hidden="true" tabindex="-1"></a>test_y <span class="ot">&lt;-</span> test[, <span class="st">'median_house_value'</span>]</span>
+<span id="cb44-2"><a href="#cb44-2" aria-hidden="true" tabindex="-1"></a>test_x <span class="ot">&lt;-</span> test[, <span class="fu">names</span>(test) <span class="sc">!=</span> <span class="st">'median_house_value'</span>]</span>
+<span id="cb44-3"><a href="#cb44-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb44-4"><a href="#cb44-4" aria-hidden="true" tabindex="-1"></a>y_pred <span class="ot">&lt;-</span> <span class="fu">predict</span>(rf_model, test_x)</span>
+<span id="cb44-5"><a href="#cb44-5" aria-hidden="true" tabindex="-1"></a>test_mse <span class="ot">&lt;-</span> <span class="fu">mean</span>((y_pred <span class="sc">-</span> test_y)<span class="sc">^</span><span class="dv">2</span>)</span>
+<span id="cb44-6"><a href="#cb44-6" aria-hidden="true" tabindex="-1"></a>test_rmse <span class="ot">&lt;-</span> <span class="fu">sqrt</span>(test_mse)</span>
+<span id="cb44-7"><a href="#cb44-7" aria-hidden="true" tabindex="-1"></a>test_rmse</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 47625.57</code></pre>
+</div>
+</div>
+</section>
+
+</main>
+<!-- /main column -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    target: function(trigger) {
+      return trigger.previousElementSibling;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+</div> <!-- /content -->
+
+
+
+</body></html>

@@ -1,5 +1,5 @@
 ---
-title: "Basic ML"
+title: "Basic ML (TIDY)"
 format: html
 ---
 
@@ -13,7 +13,6 @@ format: html
 #| warning: false
 
 library(tidyverse)
-library(reshape2)
 library(kableExtra)
 
 bs_style <- c("striped", "hover", "condensed", "responsive")
@@ -22,6 +21,7 @@ kbl <- function(data) kableExtra::kbl(data) %>% kable_styling()
 
 housing <- read_csv(here::here("data", "housing.csv"))
 kbl(head(housing))
+
 ```
 
 We want to predict the median house value.
@@ -30,100 +30,54 @@ We want to predict the median house value.
 
 
 ```{r}
-summary(housing)
-
+skimr::skim(housing)
 count(housing, ocean_proximity)
 ```
 
+
 ```{r}
-ggplot(melt(housing), mapping = aes(x = value)) +
+housing %>% 
+  pivot_longer(cols = -ocean_proximity, names_to = "variable",
+               values_to = "value") %>% 
+  ggplot(aes(value)) +
   geom_histogram(bins = 30) +
   facet_wrap(~variable, scales = "free_x")
 ```
 
 ## Data cleaning
 
-### missing value imputation for total bedrooms
+1. missing value imputation for total bedrooms
+2. make the total cols as mean
+3. Scale the numerical values
+4. Turn categories into booleans
 
 ```{r}
-housing$total_bedrooms[is.na(housing$total_bedrooms)] <- median(housing$total_bedrooms, na.rm = TRUE)
-
-
-summary(housing$total_bedrooms)
-```
-
-### make the total cols as mean
-
-```{r}
-housing$mean_bedrooms <- housing$total_bedrooms / housing$households
-housing$mean_rooms <- housing$total_rooms / housing$households
-
-drops <- c('total_bedrooms', 'total_rooms')
-
-housing <- housing[, !(names(housing) %in% drops)]
-
-kbl(head(housing))
-```
-
-### Turn categories into booleans
-
-**A really weird (& hard) way (but simpler to understand, I GUESS!!) to do things**
-
-```{r}
-categories <- unique(housing$ocean_proximity)
-
-cat_housing <- data.frame(ocean_proximity = housing$ocean_proximity)
-
-for (cat in categories) {
-  cat_housing[, cat] <- rep(0, nrow(cat_housing))
-}
-
-kbl(head(cat_housing))
-```
-
-**Yes, now down to the pitfall of looping over a dataframe in R!!!** 
-
-```{r}
-for (i in 1:length(cat_housing$ocean_proximity)) { # equiv to nrow
-  cat <- as.character(cat_housing$ocean_proximity[i])
-  cat_housing[, cat][i] = 1 
-}
-
-head(cat_housing)
-kbl(sample_n(cat_housing, 5))
-```
-
-```{r}
-# dropping the ocean_proximity (again hard way to do things)
-
-cat_columns <- names(cat_housing)
-keep_columns <- cat_columns[cat_columns != 'ocean_proximity']
-# cat_housing <- select(cat_housing, !!!keep_columns) # it works though (simpler)
-cat_housing <- select(cat_housing, one_of(keep_columns))
-
-kbl(sample_n(cat_housing, 6))
-```
-
-### Scale the numerical values
-
-```{r}
-drops_num <- c('ocean_proximity', 'median_house_value')
-housing_num <- housing[, !(names(housing) %in% drops_num)]
-
-kbl(head(housing_num))
-```
-
-```{r}
-scaled_housing_num <- scale(housing_num)
-
-head(scaled_housing_num)
-```
-
-```{r}
-cleaned_housing <- cbind(cat_housing, scaled_housing_num, median_house_value = housing$median_house_value)
+housing %>% 
+  mutate(
+    # cleaning step 01
+    total_bedrooms = replace_na(total_bedrooms, 
+                                replace = median(.$total_bedrooms, na.rm = TRUE)),
+    # cleaning step 02
+    mean_bedrooms = total_bedrooms / households,
+    mean_rooms = total_rooms / households
+  ) %>% 
+  # dropping the total columns
+  select(-c(total_bedrooms, total_rooms)) %>% 
+  mutate(
+    # cleaning step 03
+    across(.cols = -c(ocean_proximity, median_house_value), .fns = scale),
+    value = 1 # for one-hot-encoding
+  ) %>% 
+  pivot_wider(
+    names_from = ocean_proximity, values_from = value, values_fill = 0
+  ) -> cleaned_housing
 
 kbl(head(cleaned_housing))
+
+skimr::skim(cleaned_housing)
 ```
+
+
 
 ## Create Train Test data
 
@@ -137,10 +91,11 @@ train_sample <- sample.int(n = nrow(cleaned_housing),
 train <- cleaned_housing[train_sample, ]
 test <- cleaned_housing[-train_sample, ]
 
-head(train)
+kbl(head(train))
 
 nrow(train) + nrow(test) == nrow(cleaned_housing)
 ```
+
 ## Modelling and K-fold CV
 
 ```{r}
@@ -150,6 +105,7 @@ glm_house <- glm(median_house_value ~ median_income + mean_rooms + population,
                  data = cleaned_housing)
 glm_house
 ```
+
 ```{r}
 k_fold_cv_error = cv.glm(cleaned_housing, glm_house, K = 5)
 
@@ -166,15 +122,17 @@ glm_cv_rmse
 ```{r}
 library(randomForest)
 ```
+
 ```{r}
 set.seed(1738)
 
-train_y = train[, 'median_house_value']
+train_y = train[, 'median_house_value', drop=TRUE]
 train_x = train[, names(train) != 'median_house_value']
 
-head(train_x)
-head(train_y)
+kbl(head(train_x))
+kbl(head(train_y))
 ```
+
 ```{r}
 rf_model = randomForest(train_x, y = train_y, ntree = 500, importance = TRUE)
 
@@ -187,7 +145,7 @@ oob_rmse
 And what about the `rmse` in the test data??
 
 ```{r}
-test_y <- test[, 'median_house_value']
+test_y <- test[, 'median_house_value', drop = TRUE]
 test_x <- test[, names(test) != 'median_house_value']
 
 y_pred <- predict(rf_model, test_x)
