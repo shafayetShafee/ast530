@@ -116,13 +116,17 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 
 <div class="quarto-title-meta">
 
-    
-  
-    
+
+
+
   </div>
-  
+
 
 </header>
+
+<blockquote class="blockquote">
+<p>DISCLAIMER: This content is copied from this <a href="http://r-statistics.co/Linear-Regression.html">post</a> by r-statistics.co</p>
+</blockquote>
 
 <div class="cell">
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(cars)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -180,18 +184,18 @@ Call:
 lm(formula = dist ~ speed, data = cars)
 
 Residuals:
-    Min      1Q  Median      3Q     Max 
--29.069  -9.525  -2.272   9.215  43.201 
+    Min      1Q  Median      3Q     Max
+-29.069  -9.525  -2.272   9.215  43.201
 
 Coefficients:
-            Estimate Std. Error t value Pr(&gt;|t|)    
-(Intercept) -17.5791     6.7584  -2.601   0.0123 *  
+            Estimate Std. Error t value Pr(&gt;|t|)
+(Intercept) -17.5791     6.7584  -2.601   0.0123 *
 speed         3.9324     0.4155   9.464 1.49e-12 ***
 ---
 Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 
 Residual standard error: 15.38 on 48 degrees of freedom
-Multiple R-squared:  0.6511,    Adjusted R-squared:  0.6438 
+Multiple R-squared:  0.6511,    Adjusted R-squared:  0.6438
 F-statistic: 89.57 on 1 and 48 DF,  p-value: 1.49e-12</code></pre>
 </div>
 </div>
@@ -204,18 +208,18 @@ Call:
 lm(formula = dist ~ speed, data = cars)
 
 Residuals:
-    Min      1Q  Median      3Q     Max 
--29.069  -9.525  -2.272   9.215  43.201 
+    Min      1Q  Median      3Q     Max
+-29.069  -9.525  -2.272   9.215  43.201
 
 Coefficients:
-            Estimate Std. Error t value Pr(&gt;|t|)    
-(Intercept) -17.5791     6.7584  -2.601   0.0123 *  
+            Estimate Std. Error t value Pr(&gt;|t|)
+(Intercept) -17.5791     6.7584  -2.601   0.0123 *
 speed         3.9324     0.4155   9.464 1.49e-12 ***
 ---
 Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 
 Residual standard error: 15.38 on 48 degrees of freedom
-Multiple R-squared:  0.6511,    Adjusted R-squared:  0.6438 
+Multiple R-squared:  0.6511,    Adjusted R-squared:  0.6438
 F-statistic: 89.57 on 1 and 48 DF,  p-value: 1.49e-12</code></pre>
 </div>
 <div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>modelCoeffs <span class="ot">&lt;-</span> modelSummary<span class="sc">$</span>coefficients</span>
@@ -249,18 +253,18 @@ speed         3.932409  0.4155128  9.463990 1.489836e-12</code></pre>
 <div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>f <span class="ot">&lt;-</span> modelSummary<span class="sc">$</span>fstatistic</span>
 <span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>f</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>   value    numdf    dendf 
+<pre><code>   value    numdf    dendf
 89.56711  1.00000 48.00000 </code></pre>
 </div>
 <div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a>fstatistic <span class="ot">&lt;-</span> f[<span class="dv">1</span>]</span>
 <span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a>fstatistic</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>   value 
+<pre><code>   value
 89.56711 </code></pre>
 </div>
 <div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="fu">pf</span>(f[<span class="dv">1</span>], f[<span class="dv">2</span>], f[<span class="dv">3</span>], <span class="at">lower.tail =</span> <span class="cn">FALSE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>       value 
+<pre><code>       value
 1.489836e-12 </code></pre>
 </div>
 </div>
@@ -295,18 +299,18 @@ Call:
 lm(formula = dist ~ speed, data = train_df)
 
 Residuals:
-    Min      1Q  Median      3Q     Max 
--24.726 -11.242  -2.564  10.436  40.565 
+    Min      1Q  Median      3Q     Max
+-24.726 -11.242  -2.564  10.436  40.565
 
 Coefficients:
-            Estimate Std. Error t value Pr(&gt;|t|)    
-(Intercept) -20.1796     7.8254  -2.579   0.0139 *  
+            Estimate Std. Error t value Pr(&gt;|t|)
+(Intercept) -20.1796     7.8254  -2.579   0.0139 *
 speed         4.2582     0.4947   8.608 1.85e-10 ***
 ---
 Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 
 Residual standard error: 15.49 on 38 degrees of freedom
-Multiple R-squared:  0.661, Adjusted R-squared:  0.6521 
+Multiple R-squared:  0.661, Adjusted R-squared:  0.6521
 F-statistic: 74.11 on 1 and 38 DF,  p-value: 1.848e-10</code></pre>
 </div>
 </div>
@@ -359,8 +363,8 @@ F-statistic: 74.11 on 1 and 38 DF,  p-value: 1.848e-10</code></pre>
 </div>
 <div class="cell-output cell-output-stdout">
 <pre><code>
-fold 1 
-Observations in test set: 10 
+fold 1
+Observations in test set: 10
                     1        3        17        18       19       23        28
 speed        4.000000  7.00000 13.000000 13.000000 13.00000 14.00000 16.000000
 cvpred      -5.055642  7.46615 32.509735 32.509735 32.50974 36.68367 45.031528
@@ -372,10 +376,10 @@ cvpred       57.55332 61.727251 78.422974
 dist         36.00000 56.000000 70.000000
 CV residual -21.55332 -5.727251 -8.422974
 
-Sum of squares = 2718.14    Mean square = 271.81    n = 10 
+Sum of squares = 2718.14    Mean square = 271.81    n = 10
 
-fold 2 
-Observations in test set: 10 
+fold 2
+Observations in test set: 10
                     4         6        15        25       26       35        37
 speed        7.000000  9.000000 12.000000  15.00000 15.00000 18.00000 19.000000
 cvpred      12.045042 18.926262 29.248093  39.56992 39.56992 49.89175 53.332365
@@ -387,10 +391,10 @@ cvpred      63.654195 70.53542  70.53542
 dist        66.000000 93.00000 120.00000
 CV residual  2.345805 22.46458  49.46458
 
-Sum of squares = 4746.75    Mean square = 474.67    n = 10 
+Sum of squares = 4746.75    Mean square = 474.67    n = 10
 
-fold 3 
-Observations in test set: 10 
+fold 3
+Observations in test set: 10
                     5         8        9        11       12        16        24
 speed        8.000000 10.000000 10.00000 11.000000  12.0000 13.000000  15.00000
 cvpred      14.500881 22.393741 22.39374 26.340171  30.2866 34.233031  42.12589
@@ -402,10 +406,10 @@ cvpred       50.01875  53.96518 53.96518
 dist         32.00000  42.00000 76.00000
 CV residual -18.01875 -11.96518 22.03482
 
-Sum of squares = 1928.68    Mean square = 192.87    n = 10 
+Sum of squares = 1928.68    Mean square = 192.87    n = 10
 
-fold 4 
-Observations in test set: 10 
+fold 4
+Observations in test set: 10
                     7        13        14       20      22        33        39
 speed       10.000000  12.00000 12.000000  14.0000 14.0000 18.000000  20.00000
 cvpred      22.365043  30.50217 30.502169  38.6393 38.6393 54.913549  63.05068
@@ -417,10 +421,10 @@ cvpred       63.05068  63.05068 63.0506754
 dist         48.00000  52.00000 64.0000000
 CV residual -15.05068 -11.05068  0.9493246
 
-Sum of squares = 2102.53    Mean square = 210.25    n = 10 
+Sum of squares = 2102.53    Mean square = 210.25    n = 10
 
-fold 5 
-Observations in test set: 10 
+fold 5
+Observations in test set: 10
                     2        10        21       27        30         31
 speed        4.000000 11.000000 14.000000  16.0000 17.000000 17.0000000
 cvpred      -2.227577 25.678608 37.638402  45.6116 49.598196 49.5981959
@@ -432,10 +436,10 @@ cvpred      57.57139  73.51778 77.50438 81.490979
 dist        68.00000  54.00000 92.00000 85.000000
 CV residual 10.42861 -19.51778 14.49562  3.509021
 
-Sum of squares = 1217.21    Mean square = 121.72    n = 10 
+Sum of squares = 1217.21    Mean square = 121.72    n = 10
 
-Overall (Sum over all 10 folds) 
-      ms 
+Overall (Sum over all 10 folds)
+      ms
 254.2661 </code></pre>
 </div>
 <div class="sourceCode cell-code" id="cb44"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb44-1"><a href="#cb44-1" aria-hidden="true" tabindex="-1"></a><span class="fu">attr</span>(cvResults, <span class="st">'ms'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -464,17 +468,17 @@ Overall (Sum over all 10 folds)
 <span id="cb48-3"><a href="#cb48-3" aria-hidden="true" tabindex="-1"></a>                <span class="at">metric =</span> metric, <span class="at">trControl =</span> control)</span>
 <span id="cb48-4"><a href="#cb48-4" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(fit_lm)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>Linear Regression 
+<pre><code>Linear Regression
 
 41 samples
  1 predictor
 
 No pre-processing
-Resampling: Cross-Validated (5 fold) 
-Summary of sample sizes: 33, 33, 33, 32, 33 
+Resampling: Cross-Validated (5 fold)
+Summary of sample sizes: 33, 33, 33, 32, 33
 Resampling results:
 
-  RMSE      Rsquared   MAE     
+  RMSE      Rsquared   MAE
   14.88521  0.7186643  11.50873
 
 Tuning parameter 'intercept' was held constant at a value of TRUE</code></pre>
@@ -495,7 +499,7 @@ Tuning parameter 'intercept' was held constant at a value of TRUE</code></pre>
 </div>
 <div class="sourceCode cell-code" id="cb52"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb52-1"><a href="#cb52-1" aria-hidden="true" tabindex="-1"></a><span class="fu">postResample</span>(<span class="at">pred =</span> caret_pred, <span class="at">obs =</span> test_data<span class="sc">$</span>dist)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>      RMSE   Rsquared        MAE 
+<pre><code>      RMSE   Rsquared        MAE
 16.3821667  0.5901666 14.8413055 </code></pre>
 </div>
 </div>
@@ -522,7 +526,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       toggleBodyColorMode(bsSheetEl);
     }
   }
-  toggleBodyColorPrimary();  
+  toggleBodyColorPrimary();
   const icon = "";
   const anchorJS = new window.AnchorJS();
   anchorJS.options = {
@@ -549,11 +553,11 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       button.setAttribute("data-bs-toggle", "tooltip");
       button.setAttribute("data-bs-placement", "left");
       button.setAttribute("data-bs-title", "Copied!");
-      tooltip = new bootstrap.Tooltip(button, 
-        { trigger: "manual", 
+      tooltip = new bootstrap.Tooltip(button,
+        { trigger: "manual",
           customClass: "code-copy-button-tooltip",
           offset: [0, -8]});
-      tooltip.show();    
+      tooltip.show();
     }
     setTimeout(function() {
       if (tooltip) {
@@ -583,7 +587,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       theme: 'quarto',
       placement: 'bottom-start'
     };
-    window.tippy(el, config); 
+    window.tippy(el, config);
   }
   const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
   for (var i=0; i<noterefs.length; i++) {

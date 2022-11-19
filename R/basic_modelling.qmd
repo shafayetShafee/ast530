@@ -5,6 +5,8 @@ execute:
   warning: false
 ---
 
+> DISCLAIMER: This content is copied from this [post](http://r-statistics.co/Linear-Regression.html) by r-statistics.co
+
 ```{r}
 head(cars)
 ```
