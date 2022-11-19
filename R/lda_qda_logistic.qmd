@@ -1,0 +1,182 @@
+---
+title: "LDA, QDA, Logistic"
+format: html
+execute: 
+  warning: false
+---
+
+
+```{r}
+library(ISLR)
+
+data("Auto")
+
+head(Auto)
+```
+
+```{r}
+mpg01 <- rep(0, length(Auto$mpg))
+mpg01[Auto$mpg > median(Auto$mpg)] <- 1
+Auto <- data.frame(Auto, mpg01)
+summary(Auto)
+```
+```{r}
+cor(Auto[, -9])
+```
+
+```{r}
+library(corrplot)
+
+corrplot::corrplot.mixed(cor(Auto[, -9]), upper="circle")
+```
+
+
+```{r}
+pairs(Auto[, -9])
+```
+
+## Boxplot
+
+```{r}
+par(mfrow=c(2,3))
+boxplot(cylinders ~ mpg01, data = Auto, main = "Cylinders vs mpg01")
+boxplot(displacement ~ mpg01, data = Auto, main = "Displacement vs mpg01")
+boxplot(horsepower ~ mpg01, data = Auto, main = "Horsepower vs mpg01")
+boxplot(weight ~ mpg01, data = Auto, main = "Weight vs mpg01")
+boxplot(acceleration ~ mpg01, data = Auto, main = "Acceleration vs mpg01")
+boxplot(year ~ mpg01, data = Auto, main = "Year vs mpg01")
+```
+
+## train test set
+
+```{r}
+set.seed(123)
+train <- sample(1:dim(Auto)[1], dim(Auto)[1]*.7, rep=FALSE)
+test <- -train
+training_data<- Auto[train, ]
+testing_data <- Auto[test, ]
+mpg01.test <- mpg01[test]
+```
+
+
+## LDA
+
+
+```{r}
+library(MASS)
+
+lda_model <- lda(mpg01 ~ cylinders + weight + displacement + horsepower, data = training_data)
+lda_model
+```
+
+```{r}
+lda_pred <- predict(lda_model, testing_data)
+names(lda_pred)
+head(lda_pred$x)
+head(lda_pred$class)
+head(lda_pred$posterior)
+```
+
+```{r}
+table(lda_pred$class, mpg01.test)
+```
+
+```{r}
+mean(lda_pred$class != mpg01.test)
+```
+
+## QDA
+
+
+```{r}
+qda_model = qda(mpg01 ~ cylinders + horsepower + weight + acceleration, data=training_data)
+qda_model
+```
+
+```{r}
+# compute the confusion matrix
+qda.class=predict(qda_model, testing_data)$class
+table(qda.class, testing_data$mpg01)
+```
+
+
+```{r}
+mean(qda.class != testing_data$mpg01)
+```
+
+## Logistic
+
+```{r}
+glm_model <- glm(mpg01 ~ cylinders + weight + displacement + horsepower, data = training_data, family = binomial)
+summary(glm_model)
+```
+
+```{r}
+probs <- predict(glm_model, testing_data, type = "response")
+pred.glm <- rep(0, length(probs))
+pred.glm[probs > 0.5] <- 1
+table(pred.glm, mpg01.test)
+```
+
+```{r}
+mean(pred.glm != mpg01.test)
+```
+
+## KNN
+
+```{r}
+data = scale(Auto[, -c(9,10)])
+
+set.seed(1234)
+train <- sample(1:dim(Auto)[1], 392*.7, rep=FALSE)
+#train <- sample(1:dim(Auto)[1], dim(Auto)[1]*.7, rep=FALSE)
+test <- -train
+training_data = data[train,c("cylinders","horsepower","weight","acceleration")]
+testing_data = data[test, c("cylinders", "horsepower","weight","acceleration")]
+## KNN take the training response variable seperately
+train.mpg01 = Auto$mpg01[train]
+
+## we also need the have the testing_y seperately for assesing the model later on
+test.mpg01= Auto$mpg01[test]
+```
+
+
+```{r}
+library(class)
+
+set.seed(1234)
+knn_pred_y = knn(training_data, testing_data, train.mpg01, k = 1)
+table(knn_pred_y, test.mpg01)
+```
+
+```{r}
+mean(knn_pred_y != test.mpg01)
+```
+
+```{r}
+knn_pred_y = NULL
+error_rate = NULL
+
+for(i in 1:dim(testing_data)[1]){
+set.seed(1234)
+knn_pred_y = knn(training_data, testing_data, train.mpg01, k=i)
+error_rate[i] = mean(test.mpg01 != knn_pred_y)
+}
+
+### find the minimum error rate
+min_error_rate = min(error_rate)
+print(min_error_rate)
+```
+```{r}
+### get the index of that error rate, which is the k
+K = which(error_rate == min_error_rate)
+print(K)
+```
+```{r}
+library(ggplot2)
+
+plot(1:nrow(testing_data), error_rate, type = "l")
+abline(v = 4)
+
+```
+

@@ -1,0 +1,151 @@
+---
+title: "Model Selection"
+format: html
+execute: 
+  warning: false
+---
+
+> DISCLAIMER: This content is copied from this [post](http://r-statistics.co/Model-Selection-in-R.html) by r-statistics.co
+
+## Data Prep
+
+```{r}
+response_df <- mtcars['mpg']
+predictors_df <- mtcars[, !names(mtcars) %in% 'mpg']
+```
+
+## Stepwise regression
+
+```{r}
+lmMod <- lm(mpg ~ disp + hp + wt + qsec, data = mtcars)
+selectMod <- step(lmMod)
+summary(selectMod)
+```
+
+```{r}
+all_vif <- car::vif(selectMod)
+all_vif
+
+all_vif1 <- car::vif(lmMod)
+all_vif1
+```
+We will work with `lmMod` just to show how things are done..
+
+### Recursively remove variables  with vif > 4
+
+```{r}
+all_vif1 <- car::vif(lmMod)
+
+signif_all <- names(all_vif1)
+
+while(any(all_vif1 > 4)) {
+  var_with_max_vif <- names(which(all_vif1 == max(all_vif1)))
+  
+  signif_all <- signif_all[!(signif_all %in% var_with_max_vif)]
+  
+  new_formula <- as.formula(paste("mpg ~ ", paste(signif_all, collapse = " + ")))
+  
+  selectMod1 <- lm(new_formula, data = mtcars)
+  
+  all_vif1 <- car::vif(selectMod1)
+}
+```
+
+
+```{r}
+all_vif1
+
+summary(selectMod1)
+```
+
+## Recursively remove non significant variables
+
+Again, We will work with `lmMod` just to show how things are done..
+
+
+```{r}
+all_vars <- names(lmMod[[1]][-1]) # getting the name of model predictors
+
+summ <- summary(lmMod)
+pvals <- summ[[4]][, 4]
+
+not_significant <- character()
+not_significant <- names(which(pvals > 0.1))
+not_significant <- not_significant[!not_significant %in% '(intercept)']
+
+while(length(not_significant) > 0) {
+  all_vars <- all_vars[!all_vars %in% not_significant[[1]]]
+  new_formula2 <- as.formula(paste("mpg ~ ", paste(all_vars , collapse = " + ")))
+  selectedMod2 <- lm(new_formula2, data = mtcars)
+  
+  summ <- summary(selectedMod2)
+  pvals <- summ[[4]][, 4]
+  not_significant <- character()
+  not_significant <- names(which(pvals > 0.1))
+  not_significant <- not_significant[!not_significant %in% '(intercept)']
+}
+
+summary(selectedMod2)
+```
+## Best Subsets
+
+### `regsubsets`
+
+```{r}
+library(leaps)
+
+regsubsetObj <- regsubsets(x = predictors_df, y = response_df[[1]], nbest = 2, really.big = TRUE)
+
+plot(regsubsetObj, scale = "adjr2")
+```
+
+### `leaps`
+
+
+```{r}
+leapSet <- leaps(x = predictors_df, y = response_df[[1]], nbest = 1, method = "adjr2")
+leapSet
+```
+
+```{r}
+# to choose a model with 4 variables
+selectVarsIdx <- leapSet$which[4, ]
+new_data <- cbind(response_df, predictors_df[, selectVarsIdx])
+leap_selected_mod <- lm(mpg ~ . , data = new_data)
+summary(leap_selected_mod)
+```
+### `RegBest` from `{FactoMineR}`
+
+```{r}
+library(FactoMineR)
+
+regMod <- RegBest(y = response_df[[1]], x = predictors_df)
+
+# regMod$all
+regMod$summary
+
+regMod$best
+```
+## Simulated Annealing
+
+```{r}
+library(subselect)
+
+results <- anneal(cor(predictors_df), kmin = 1, kmax = ncol(predictors_df) - 1,
+                  nsol = 4, niter = 10, setseed = TRUE)
+
+names(results)
+
+results$bestsets
+
+```
+
+```{r}
+# suppose we want a three predictor model
+selectVarsIdx <- results$bestsets[3, 1:3]
+new_data <- cbind(response_df, predictors_df[, selectVarsIdx])
+head(new_data)
+
+lm(mpg ~ ., data = new_data)
+```
+
