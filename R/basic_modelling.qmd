@@ -1,0 +1,161 @@
+---
+title: "Basic Modelling"
+format: html
+execute: 
+  warning: false
+---
+
+```{r}
+head(cars)
+```
+
+```{r}
+# scatter plot for checking pattern
+scatter.smooth(x = cars$speed, y = cars$dist, main = "Dist ~ Speed")
+
+# boxplot - check for outliers
+boxplot(cars$dist, main = "Distance", sub = paste("#Outlier:", boxplot.stats(cars$dist)$out))
+```
+
+
+```{r}
+# density plot to check if the response variable is close to normality
+par(mfrow = c(1, 2))
+
+plot(density(cars$speed), main = "Density Plot: Speed", ylab = "frequency",
+     sub = paste("Skewness: ", round(e1071::skewness(cars$speed), 2)))
+polygon(density(cars$speed), col = "red")
+
+plot(density(cars$dist), main = "Density plot: dist", ylab = "frequency",
+     sub = paste("Skewness: ", round(e1071::skewness(cars$dist), 2)))
+polygon(density(cars$dist), col = "red")
+```
+
+```{r}
+cor(cars$speed, cars$dist)
+```
+
+## Model building (linear)
+
+```{r}
+linearMod <- lm(dist ~ speed, data = cars)
+summary(linearMod)
+```
+
+```{r}
+modelSummary <- summary(linearMod)
+modelSummary
+modelCoeffs <- modelSummary$coefficients
+modelCoeffs 
+beta_estimate <- modelCoeffs["speed", "Estimate"]
+beta_estimate 
+std_error <- modelCoeffs["speed", "Std. Error"]
+std_error
+t_value <- beta_estimate / std_error
+t_value
+# p_value <- 2 * pt(abs(t_value), df = nrow(cars) - ncol(cars), lower.tail = FALSE)
+p_value <- 2 * pt(-abs(t_value), df = nrow(cars) - ncol(cars))
+p_value
+f <- modelSummary$fstatistic
+f
+fstatistic <- f[1]
+fstatistic
+pf(f[1], f[2], f[3], lower.tail = FALSE)
+```
+```{r}
+AIC(linearMod)
+BIC(linearMod)
+```
+
+## Creating Train Test set
+
+```{r}
+set.seed(100)
+
+train_idx <- sample(1:nrow(cars), floor(0.8*nrow(cars)))
+train_df <- cars[train_idx, ]
+test_df <- cars[-train_idx, ]
+```
+
+
+```{r}
+lmMod <- lm(dist ~ speed, data = train_df)
+distPred <- predict(lmMod, test_df)
+
+summary(lmMod)
+```
+## predicion accuarcy and error rates
+
+```{r}
+actual_preds <- data.frame(actuals = test_df$dist, predicted = distPred)
+head(actual_preds)
+
+correlation_acc <- cor(actual_preds)
+```
+
+$$
+\text{Min Max Accuarcy} = mean\left(\frac{min(actuals, predicteds)}{max(actuals, predicteds)}\right)
+$$
+
+
+$$
+\text{MAPE} = mean\left(\frac{abs(predicteds - actuals)}{actuals}\right)
+$$
+
+
+```{r}
+min_max_accuracy <- mean(apply(actual_preds, 1, min) / 
+                         apply(actual_preds, 1, max))
+min_max_accuracy
+
+mape <- mean(abs(actual_preds$predicted - actual_preds$actuals) / actual_preds$actuals)
+mape
+```
+
+## K-fold CV
+
+```{r}
+#| fig-height: 8
+#| fig-width: 6
+
+library(DAAG)
+
+cvResults <- CVlm(data = cars, form.lm = dist ~ speed, dots = FALSE, seed = 29,
+                  m = 5, printit = TRUE, legend.pos = "topleft")
+
+attr(cvResults, 'ms')
+```
+
+
+## K fold CV with `caret`
+
+```{r}
+library(caret)
+
+set.seed(100)
+train_index <- createDataPartition(cars$dist, p = 0.8, list = FALSE)
+train_data <- cars[train_index, ]
+test_data <- cars[-train_index, ]
+```
+
+
+```{r}
+control <- trainControl(method = "cv", number = 5)
+metric <- "RMSE"
+```
+
+```{r}
+# linear model
+fit_lm <- train(dist ~ speed, data = train_data, method = "lm", 
+                metric = metric, trControl = control)
+print(fit_lm)
+```
+```{r}
+caret_pred <- predict(fit_lm, test_data)
+actual_preds_caret <- data.frame(actual = test_data$dist, pred = caret_pred)
+head(actual_preds_caret)
+
+postResample(pred = caret_pred, obs = test_data$dist)
+```
+
+
